@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
     @State var authenticated = false
     @State var trigger = false
-    let healthStore = HKHealthStore()
+    @StateObject var healthKitManager = HealthKitManager.shared
     
     let allTypes: Set = [
         HKQuantityType.stateOfMindType()
@@ -23,8 +23,7 @@ struct ContentView: View {
                 trigger.toggle()
             }
         }
-        .disabled(!authenticated)
-        .healthDataAccessRequest(store: healthStore,
+        .healthDataAccessRequest(store: healthKitManager.healthStore,
                                  shareTypes: allTypes,
                                  readTypes: allTypes,
                                  trigger: trigger) { result in
